@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Lección 05 - On y Bind</title>
+
+	<!-- Importacion del jQuery -->
+	<script src="js/lib/jquery-2.1.4.min.js"></script>
+	
+	<!-- Importacion del Bootstrap -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+
+<div class="container">
+<h1>Tarea: <small>tabla del 3</small></h1>
+<hr>
+<select id="cmbBase" class="form-control">
+	<option value="3" selected>3</option>
+	<option value="4">4</option>
+	<option value="5" >5</option>
+	<option value="6">6</option>
+</select>
+<br>
+<button class="btn btn-primary">Agregar línea</button>	
+<br><br>
+<table class="table table-striped">
+<tr >
+	<th>Base</th>
+	<th>x</th>
+	<th>Número</th>
+	<th>=</th>
+	<th>Resultado</th>
+</tr>
+</table>
+
+</div>
+
+<script>
+(function(){
+	var contador = 0;
+	var base = $("#cmbBase").val();
+	// Agrega una línea a la tabla dde forma dinamica
+	function agregarLinea() {
+		contador++;
+		var base = $("#cmbBase").val();
+		var resultado = base * contador;
+		var linea = '<tr>' +
+		'<td>' + base + '</td>' +
+		'<td>x</td>' +
+		'<td>' + contador + '</td>' +
+		'<td>=</td>' +
+		'<th>' + resultado + '</th>' +
+		'</tr>';
+		$(".table").append(linea);
+	}
+	// Comprueba si el valor de la base ha cambiado y devuelve true si es así
+	function comprobarIndiceTabla(){
+		var auxBase = $("#cmbBase").val();
+		var check = false;
+		if (auxBase !== base) {
+			check = true;
+			base = auxBase;
+		}
+		return check;
+	}
+	// Actualiza el texto pequeño con el valor de la base seleccionada
+	function cambiarIndice() {
+		$("small").text('tabla del ' + base);
+	}
+	// Reinicia la tabla eliminando todas las filas, excepto la primera
+	function resetearTabla() {
+		$("tr").not(":eq(0)").remove();
+		contador = 0;
+	}
+  	// Agregar evento click al botón para llamar a la función agregarLinea
+	$(".btn").on("click", agregarLinea);
+
+	// Agregar evento blur al elemento cmbBase para detectar el cambio de base
+	$("#cmbBase").blur(function(){
+		if (comprobarIndiceTabla()) {
+			resetearTabla();
+			cambiarIndice();
+		}
+	});
+
+})();
+</script>
+</body>
+</html>
